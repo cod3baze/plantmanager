@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,6 +18,8 @@ const UserIdentification: React.FC = () => {
   const [isFilled, setIsFilled] = useState(false);
   const [name, setName] = useState<string>();
 
+  const navigation = useNavigation();
+
   function handleInputBlur() {
     setIsFocused(false);
     setIsFilled(!!name);
@@ -27,6 +30,12 @@ const UserIdentification: React.FC = () => {
   function handleInputChange(value: string) {
     setIsFilled(!!value);
     setName(value);
+  }
+
+  function handleSubmit() {
+    navigation.navigate("Confirmation", {
+      username: name,
+    });
   }
 
   return (
@@ -59,7 +68,7 @@ const UserIdentification: React.FC = () => {
             />
 
             <View style={styles.footer}>
-              <Button title="Confirmar" />
+              <Button onPress={handleSubmit} title="Confirmar" />
             </View>
           </View>
         </View>

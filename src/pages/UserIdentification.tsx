@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,6 +13,22 @@ import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 
 const UserIdentification: React.FC = () => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+  const [name, setName] = useState<string>();
+
+  function handleInputBlur() {
+    setIsFocused(false);
+    setIsFilled(!!name);
+  }
+  function handleInputFocus() {
+    setIsFocused(true);
+  }
+  function handleInputChange(value: string) {
+    setIsFilled(!!value);
+    setName(value);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -22,7 +38,7 @@ const UserIdentification: React.FC = () => {
         <View style={styles.content}>
           <View style={styles.form}>
             <View style={styles.header}>
-              <Text style={styles.emoji}>😃</Text>
+              <Text style={styles.emoji}>{isFilled ? `😃` : `😆`}</Text>
 
               <Text style={styles.title}>
                 Como podemos {"\n"}
@@ -31,9 +47,15 @@ const UserIdentification: React.FC = () => {
             </View>
 
             <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                (isFocused || isFilled) && { borderColor: colors.green },
+              ]}
               placeholder="Digite um nome"
               keyboardType="default"
+              onBlur={handleInputBlur}
+              onFocus={handleInputFocus}
+              onChangeText={handleInputChange}
             />
 
             <View style={styles.footer}>
